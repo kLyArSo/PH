@@ -18,10 +18,10 @@ void    *entry_point(void   *ptr)
         print_status("is eating", data->philo_index);
         my_sleep(data->game_args->time_to_eat * 1000);
 
-        print_status("has dropped a fork", data->philo_index);
-        print_status("has dropped a fork", data->philo_index);
         pthread_mutex_unlock(&data->forks[data->philo_fork_1]);
+        print_status("has dropped a fork", data->philo_index);
         pthread_mutex_unlock(&data->forks[data->philo_fork_2]);
+        print_status("has dropped a fork", data->philo_index);
 
         print_status("is sleeping", data->philo_index);
         my_sleep(data->game_args->time_to_sleep * 1000);

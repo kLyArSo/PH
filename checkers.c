@@ -24,7 +24,6 @@ void    *checker_meal(void    *ptr)
     }
     pthread_mutex_lock(&g_lock_1);
     g_notification = MIN_MEAL_REACHED;
-    printf("MIN_MEAL_REACHED\nEND OF SIMULATION\n");
     return (NULL);
 }
 
@@ -53,7 +52,7 @@ void    *checker_death(void    *ptr)
         else
             break ;
     }
-    print_status("died.\nEND OF SIMULATION", i);
+    print_status("died", i);
     pthread_mutex_lock(&g_lock_1);
     g_notification = PHILO_DEATH;
     return (NULL);
