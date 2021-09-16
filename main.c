@@ -1,12 +1,12 @@
 #include "header.h"
 
-long    get_current_time_in_ms()
+ssize_t    get_current_time_micro_seconds()
 {
-    struct timeval          current_time;
-    int time;
+    struct timeval  current_time;
+    ssize_t         time;
 
     gettimeofday(&current_time, NULL);
-    time = current_time.tv_sec * 1000 + current_time.tv_usec / 1000;
+    time = current_time.tv_sec * 1000 * 1000 + current_time.tv_usec;
     return (time);
 }
 
@@ -16,7 +16,7 @@ int main(int argc, char **argv)
     pthread_t               *philosophers;
     t_philo_data            *philos_data;
 
-    g_start_time = get_current_time_in_ms();
+    g_start_time = get_current_time_micro_seconds();
     if (argv_error_handling(argc, argv) == ERROR_DETECTED)
         return (ERROR_DETECTED);
     game_args = fetch_args(argc, argv);
@@ -36,14 +36,14 @@ int main(int argc, char **argv)
     if (philosophers == NULL || philos_data == NULL)
         return (ERROR_DETECTED);
     pthread_mutex_init(&g_lock_1,NULL);
-    pthread_mutex_init(&g_lock_2,NULL);
+    //pthread_mutex_init(&g_lock_2,NULL);
     set_philo_data(philos_data, game_args, forks_init(game_args));
     if (philos_data->forks == NULL)
         return (ERROR_DETECTED);
+
     /*-----------------------------------------------------------------INITIALZING DONE------------------------------------------------------------*/
     deploy_philosophers(game_args, philosophers, philos_data);
     checker_wave_deployment(philos_data);
-    //join_the_bunch(philosophers, game_args);
     while(1)
     {
         if (g_notification == MIN_MEAL_REACHED && game_args->last_arg_presence == 1)

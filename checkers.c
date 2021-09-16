@@ -22,9 +22,9 @@ void    *checker_meal(void    *ptr)
         if (i == nbr_of_philo)
             break ;
     }
+    pthread_mutex_lock(&g_lock_1);
     g_notification = MIN_MEAL_REACHED;
     printf("MIN_MEAL_REACHED\nEND OF SIMULATION\n");
-    pthread_mutex_lock(&g_lock_1);
     return (NULL);
 }
 
@@ -42,7 +42,7 @@ void    *checker_death(void    *ptr)
         i = 0;
         while (i < nbr_of_philo)
         {
-            current_timestamp = get_current_time_in_ms() - g_start_time;
+            current_timestamp = (get_current_time_micro_seconds() - g_start_time) / 1000;
             if (current_timestamp < data[i].next_meal_timestamp)
                 i++;
             else
