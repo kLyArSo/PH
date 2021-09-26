@@ -10,69 +10,79 @@ ssize_t    get_current_time_micro_seconds()
     return (time);
 }
 
+int     game_args_error()
+{
+    printf("ERROR : MALLOC\n");
+    //system("leaks a.out | grep bytes");
+    return (ERROR_DETECTED);
+}
+
+int     invalid_value_error(t_argv  *game_args)
+{
+    free(game_args);
+    printf("ERROR : INVALID VALUE\n");
+    //system("leaks a.out | grep bytes");
+    return (ERROR_DETECTED);
+}
+
+int     philo_malloc_err(t_argv  *game_args)
+{
+    free(game_args);
+    //system("leaks a.out | grep bytes");
+    return (ERROR_DETECTED);
+}
+
+int     philos_data_malloc_err(t_argv  *game_args, pthread_t    *philosophers)
+{
+        free(game_args);
+        free(philosophers);
+        system("leaks a.out | grep bytes");
+        return (ERROR_DETECTED);
+}
+
+int     un_init_forks(t_philo_data  *philos_data, t_argv  *game_args, pthread_t *philosophers)
+{
+    pthread_mutex_destroy(&g_lock_1);
+    free(philos_data);
+    free(game_args);
+    free(philosophers);
+    system("leaks a.out | grep bytes");
+    return (ERROR_DETECTED);
+}
+
 int main(int argc, char **argv)
 {
     t_argv                  *game_args;
     pthread_t               *philosophers;
     t_philo_data            *philos_data;
-    pthread_t min_meal;
-    pthread_t death;
+    pthread_t               min_meal;
+    pthread_t               death;
     int i;
 
     i = 0;
     g_start_time = get_current_time_micro_seconds();
     if (argv_error_handling(argc, argv) == ERROR_DETECTED)
-    {
-        system("leaks a.out | grep bytes");
-        return (ERROR_DETECTED);//no allocations here
-    }
+        return (ERROR_DETECTED);
     game_args = fetch_args(argc, argv);
     if (game_args == NULL)
-    {
-        printf("ERROR : MALLOC\n");
-        system("leaks a.out | grep bytes");
-        return (ERROR_DETECTED);
-    }
+        return (game_args_error());
     if (last_check(game_args) == ERROR_DETECTED)
-    {
-        free(game_args);
-        printf("ERROR : INVALID VALUE\n");
-        system("leaks a.out | grep bytes");
-        return (ERROR_DETECTED);
-    }
+        return(invalid_value_error(game_args));
     /*------------------------------------------------------------ERROR HANDLING DONE------------------------------------------------------------*/
     philosophers = malloc(game_args->number_of_philosophers * sizeof(pthread_t));
     if (philosophers == NULL)
-    {
-        free(game_args);
-        system("leaks a.out | grep bytes");
-        return (ERROR_DETECTED);
-    }
+        return (philo_malloc_err(game_args));
     philos_data = malloc(game_args->number_of_philosophers * sizeof(t_philo_data));
     if (philos_data == NULL)
-    {
-        free(game_args);
-        free(philosophers);
-        system("leaks a.out | grep bytes");
-        return (ERROR_DETECTED);
-    }
-    pthread_mutex_init(&g_lock_1,NULL);
-
+        return (philos_data_malloc_err(game_args, philosophers));
+    pthread_mutex_init(&g_lock_1, NULL);
     set_philo_data(philos_data, game_args, forks_init(game_args));
     if (philos_data->forks == NULL)
-    {
-        pthread_mutex_destroy(&g_lock_1);
-        free(philos_data);
-        free(game_args);
-        free(philosophers);
-        system("leaks a.out | grep bytes");
-        return (ERROR_DETECTED);
-    }
-
+        return (un_init_forks(philos_data, game_args, philosophers));
     /*-----------------------------------------------------------------INITIALZING DONE------------------------------------------------------------*/
     deploy_philosophers(game_args, philosophers, philos_data);
     checker_wave_deployment(philos_data, &min_meal, &death);
-    while(1)
+    while (1)
     {
         if ((g_notification == MIN_MEAL_REACHED
         && game_args->last_arg_presence == 1)
