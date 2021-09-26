@@ -93,8 +93,8 @@ int     argv_error_handling(int argc, char **argv)
 
 int     last_check(t_argv  *game_args)
 {
-    if (game_args->number_of_philosophers <= 0 || game_args->time_to_die < 60
-     || game_args->time_to_eat < 60 || game_args->time_to_sleep < 60)
+    if (game_args->number_of_philosophers <= 0 || game_args->time_to_die < 0
+     || game_args->time_to_eat < 0 || game_args->time_to_sleep < 0)
         return (ERROR_DETECTED);
     if (game_args->last_arg_presence == LAST_ARG_PRESENT)
     {

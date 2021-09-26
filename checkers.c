@@ -58,12 +58,10 @@ void    *checker_death(void    *ptr)
     return (NULL);
 }
 
-void    checker_wave_deployment(t_philo_data    *data)
+void    checker_wave_deployment(t_philo_data *data, pthread_t *min_meal, pthread_t *death)
 {
-    pthread_t   min_meal;
-    pthread_t   death;
     if (data->game_args->last_arg_presence == 1)
-        pthread_create(&min_meal, NULL, checker_meal, (void    *)data);
-    pthread_create(&death, NULL, checker_death, (void    *)data);
+        pthread_create(min_meal, NULL, checker_meal, (void    *)data);
+    pthread_create(death, NULL, checker_death, (void    *)data);
     
 }

@@ -70,14 +70,14 @@ void    print_status(char *str, int x)
     pthread_mutex_unlock(&g_lock_1);
 }
 
-void    join_the_bunch(pthread_t    *philosophers, t_argv   *game_args)
-{
-    int     i;
-    void    *ptr;
-    i = 0;
-    while (i < game_args->number_of_philosophers)
-    {
-        pthread_join(philosophers[i], NULL);
-        i++;
-    }
-}
+// void    join_the_bunch(pthread_t    *philosophers, t_argv   *game_args)
+// {
+//     int     i;
+//     void    *ptr;
+//     i = 0;
+//     while (i < game_args->number_of_philosophers)
+//     {
+//         pthread_join(philosophers[i], NULL);
+//         i++;
+//     }
+// }

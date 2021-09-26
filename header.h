@@ -49,7 +49,7 @@ void                print_status(char *str, int x);
 void                deploy_philosophers(t_argv  *game_args, pthread_t *philosophers, t_philo_data  *data);
 void                *entry_point(void   *ptr);
 ssize_t             get_current_time_micro_seconds();
-void                checker_wave_deployment(t_philo_data    *data);
+void                checker_wave_deployment(t_philo_data *data, pthread_t *min_meal, pthread_t *death);
 void                *checker_death(void    *ptr);
 void                *checker_meal(void    *ptr);
 void                join_the_bunch(pthread_t    *philosophers, t_argv   *game_args);
@@ -60,5 +60,4 @@ void                my_sleep(long time);
 ssize_t             g_start_time;
 int                 g_notification;
 pthread_mutex_t     g_lock_1;
-//thread_mutex_t     g_lock_2;
 
